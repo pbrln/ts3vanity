@@ -1,0 +1,16 @@
+CFLAGS = -Wall -g -O0
+
+all: libs ts3vanity
+
+libs: ../../ts3_sdk_3.0.3.2/bin/libts3client_linux_amd64.so
+	ln -sf ../../ts3_sdk_3.0.3.2/bin/libts3client_linux_amd64.so .
+	ln -sf ../../ts3_sdk_3.0.3.2/bin/soundbackends .
+
+ts3vanity: main.o
+	gcc -o ts3vanity main.o -Wl,-rpath,"." -L../../ts3_sdk_3.0.3.2/bin -lts3client_linux_amd64
+
+main.o: main.c
+	gcc -c -I../../ts3_sdk_3.0.3.2/include main.c $(CFLAGS)
+
+clean:
+	rm -rf *.o ts3vanity
